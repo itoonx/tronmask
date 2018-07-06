@@ -19,6 +19,7 @@ body {
 a {
     color: #F44336;
     text-decoration: none;
+    cursor: pointer;
 }
 a:hover,
 a:focus,
@@ -27,6 +28,7 @@ a:active {
 }
 
 .auth {
+    clear: both;
     padding: 1.5rem;
     text-align: center;
 }
@@ -37,6 +39,13 @@ a:active {
     font-size: 2rem;
     margin: 1rem 0;
     color: #424242;
+}
+.auth-link {
+    font-size: 0.875rem;
+}
+.auth-link:hover,
+.auth-link:focus {
+    text-decoration: underline;
 }
 
 .input-field {
@@ -73,6 +82,9 @@ a:active {
     cursor: pointer;
     outline: 0;
 }
+.button:disabled {
+    opacity: 0.5;
+}
 .button:hover,
 .button:focus {
     background: #F5F5F5;
@@ -80,14 +92,34 @@ a:active {
 .button:active {
     transform: translateY(1px);
 }
+
 .button.brand {
     border: 1px solid #F44336;
     background: #F44336;
-    color: #FFFFFF;
+    color: #FAFAFA;
+    font-weight: 600;
 }
 .button.brand:hover,
 .button.brand:focus {
+    border: 1px solid #D32F2F;
     background: #D32F2F;
+}
+
+.button_group {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.75rem 0;
+}
+.button_group .button {
+    width: 48%;
+    margin: 0;
+}
+
+.form-info {
+    color: #616161;
+    font-size: 0.75rem;
+    text-align: left;
+    margin: 0.75rem 0 1rem;
 }
 
 .message {

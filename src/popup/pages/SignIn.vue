@@ -9,7 +9,7 @@
         <div class="auth-form">
             <input class="input-field" type="password" name="password" placeholder="Password">
 
-            <button class="button brand" type="submit" @click="state.auth = true">Sign In</button>
+            <button class="button brand" type="submit">Sign In</button>
 
             <div class="line-through">
                 <span>or</span>
@@ -25,9 +25,6 @@
     export default {
         data: () => ({
             state
-        }),
-        mounted() {
-            //
-        }
+        })
     }
 </script>

@@ -5,7 +5,7 @@ import router from './router'
 Vue.config.productionTip = false
 
 window.state = {
-    auth: false
+    keys: false
 }
 
 new Vue({
