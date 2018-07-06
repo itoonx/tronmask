@@ -1,0 +1,45 @@
+{
+  "name": "tronmask",
+  "version": "1.0.0",
+  "description": "Tron Browser Extension Wallet",
+  "author": "Hisman <hisman.ns@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "homepage": "https://github.com/hisman/tronmask",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hisman/tronmask.git"
+  },
+  "dependencies": {
+    "@tronscan/client": "^0.2.6",
+    "lodash": "^4.17.4",
+    "vue": "^2.5.2",
+    "vue-router": "^3.0.1"
+  },
+  "scripts": {
+    "dev": "webpack --config ./build/webpack.dev.js --hide-modules",
+    "build": "webpack --config ./build/webpack.prod.js -p --progress  --hide-modules --colors"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.18",
+    "copy-webpack-plugin": "^4.4.1",
+    "css-loader": "^0.28.9",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.8",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "html-webpack-plugin": "^2.30.1",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "url-loader": "^0.6.2",
+    "vue-loader": "^14.1.1",
+    "vue-template-compiler": "^2.5.13",
+    "wcer": "^1.0.3",
+    "webpack": "^3.8.1",
+    "webpack-merge": "^4.1.1",
+    "zip-webpack-plugin": "^2.1.0"
+  }
+}
