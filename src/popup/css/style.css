@@ -61,6 +61,15 @@ a:active {
     font-size: 0.75rem;
     outline: 0;
 }
+.input-field.special {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+.input-field:read-only,
+.input-field:disabled {
+    background: #EEEEEE;
+}
 .input-field:focus {
     border-color: #BDBDBD;
 }
@@ -121,13 +130,16 @@ a:active {
     text-align: left;
     margin: 0.75rem 0 1rem;
 }
+.form-info.center {
+    text-align: center;
+}
 
 .message {
     text-align: left;
     background: #E0E0E0;
     border-left: 5px solid #BDBDBD;
     color: #757575;
-    padding: 0.75rem;
+    padding: 0.5rem;
     font-size: 0.75rem;
 }
 .message.error {

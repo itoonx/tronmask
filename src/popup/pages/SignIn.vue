@@ -6,8 +6,12 @@
 
         <h1 class="auth-title">TRONMASK</h1>
 
-        <div class="auth-form">
-            <input class="input-field" type="password" name="password" placeholder="Password">
+        <div v-show="error.show" class="message error">
+            {{ error.message }}
+        </div>
+
+        <form @submit="submitForm" action="" method="post" class="auth-form">
+            <input class="input-field" type="password" name="password" placeholder="Password" v-model="password">
 
             <button class="button brand" type="submit">Sign In</button>
 
@@ -17,14 +21,46 @@
 
             <router-link class="button" to="/create-wallet">Create New Wallet</router-link>
             <router-link class="button" to="/import-wallet">Import Wallet from Private Key</router-link>
-        </div>
+        </form>
     </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+    import { decryptKeyStore } from '../keystore'
+
     export default {
         data: () => ({
-            state
-        })
+            password: '',
+            error: {
+                show: false,
+                message: ''
+            }
+        }),
+
+        computed: mapState([
+            'address',
+            'keypass',
+            'keystore'
+        ]),
+
+        methods: {
+            submitForm(e) {
+                e.preventDefault()
+
+                const wallet = decryptKeyStore(this.password, this.keystore)
+
+                if (!wallet) {
+                    this.error.show = true
+                    this.error.message = 'Password is incorrect'
+
+                    return false
+                }
+
+                this.$store.commit('address', wallet.address)
+                this.$store.commit('keypass', this.password)
+                this.$router.push('/')
+            },
+        }
     }
 </script>

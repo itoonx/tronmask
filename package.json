@@ -12,9 +12,15 @@
   },
   "dependencies": {
     "@tronscan/client": "^0.2.6",
+    "aes-js": "^3.1.1",
     "lodash": "^4.17.4",
+    "pbkdf2": "^3.0.16",
+    "uuid": "^3.3.2",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1",
+    "vuex-persist": "^1.4.3",
+    "vuex-router-sync": "^5.0.0"
   },
   "scripts": {
     "dev": "webpack --config ./build/webpack.dev.js --hide-modules",

@@ -20,7 +20,6 @@ module.exports = {
         '*://*/*',
         'activeTab',
         'background',
-        'unlimitedStorage',
         'storage'
     ],
     browser_action: {

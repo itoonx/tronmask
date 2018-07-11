@@ -11,8 +11,8 @@
         </div>
 
         <form @submit="submitForm" action="" method="post" class="auth-form">
-            <input class="input-field" type="text" name="private-key" placeholder="Private Key">
-            <input class="input-field" type="password" name="password" placeholder="New Password (min 8 chars)">
+            <input class="input-field" type="text" name="private-key" placeholder="Private Key" v-model="privateKey">
+            <input class="input-field" type="password" name="password" placeholder="New Password (min 8 chars)" v-model="password">
 
             <div class="form-info">
                 This password encrypts your private key. Make sure to remember this password as you will need it to unlock your wallet.
@@ -25,21 +25,29 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+    import { encryptKeyStore, validatePrivateKey } from '../keystore'
+    import { pkToAddress } from "@tronscan/client/src/utils/crypto"
+
     export default {
         data: () => ({
-            state,
             password: '',
+            privateKey: '',
             error: {
                 show: false,
                 message: ''
             }
         }),
+
+        computed: mapState([
+            'address',
+            'keypass',
+            'keystore'
+        ]),
+
         methods: {
             submitForm(e) {
                 e.preventDefault()
-
-                this.error.show = false
-                this.error.message = ''
 
                 if (this.password.length < 8) {
                     this.error.show = true
@@ -47,6 +55,21 @@
 
                     return false
                 }
+
+                if (!validatePrivateKey(this.privateKey)) {
+                    this.error.show = true
+                    this.error.message = 'Please enter a valid private key'
+
+                    return false
+                }
+
+                const address = pkToAddress(this.privateKey)
+                const keystore = encryptKeyStore(this.password, this.privateKey, address)
+
+                this.$store.commit('address', address)
+                this.$store.commit('keypass', this.password)
+                this.$store.commit('keystore', keystore)
+                this.$router.push('/')
             }
         }
     }
