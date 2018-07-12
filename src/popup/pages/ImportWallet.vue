@@ -39,11 +39,10 @@
             }
         }),
 
-        computed: mapState([
-            'address',
-            'keypass',
-            'keystore'
-        ]),
+        computed: mapState({
+            address: state => state.wallet.address,
+            keystore: state => state.wallet.keystore,
+        }),
 
         methods: {
             submitForm(e) {
@@ -66,9 +65,9 @@
                 const address = pkToAddress(this.privateKey)
                 const keystore = encryptKeyStore(this.password, this.privateKey, address)
 
-                this.$store.commit('address', address)
-                this.$store.commit('keypass', this.password)
-                this.$store.commit('keystore', keystore)
+                this.$store.commit('wallet/address', address)
+                this.$store.commit('wallet/keypass', this.password)
+                this.$store.commit('wallet/keystore', keystore)
                 this.$router.push('/')
             }
         }

@@ -1,19 +1,12 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import VuexPersistence from 'vuex-persist'
+export default {
+    namespaced: true,
 
-Vue.use(Vuex)
-
-const vuexLocal = new VuexPersistence({
-    storage: window.localStorage
-})
-
-export default new Vuex.Store({
     state: {
         address: false,
         keypass: false,
         keystore: false
     },
+
     mutations: {
         address(state, address) {
             state.address = address
@@ -26,6 +19,5 @@ export default new Vuex.Store({
         keystore(state, keystore) {
             state.keystore = keystore
         }
-    },
-    plugins: [vuexLocal.plugin]
-})
+    }
+}

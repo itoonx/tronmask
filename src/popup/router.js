@@ -41,13 +41,13 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!store.state.address) {
+        if (!store.state.wallet.address) {
             next({ path: '/signin' })
         }else {
             next()
         }
     }else if (to.matched.some(record => record.meta.requiresKeystore)) {
-        if (!store.state.keystore) {
+        if (!store.state.wallet.keystore) {
             next({ path: '/create-wallet' })
         }else {
             next()

@@ -16,18 +16,21 @@
     import { mapState } from 'vuex'
 
     export default {
-        computed: mapState([
-            'address',
-            'keypass',
-            'keystore'
-        ]),
+        computed: mapState({
+            address: state => state.wallet.address,
+            keystore: state => state.wallet.keystore,
+        }),
+
+        mounted() {
+            //
+        },
 
         methods: {
             logout(e) {
                 e.preventDefault()
 
-                this.$store.commit('address', false)
-                this.$store.commit('keypass', false)
+                this.$store.commit('wallet/address', false)
+                this.$store.commit('wallet/keypass', false)
                 this.$router.push('/signin')
             }
         }
