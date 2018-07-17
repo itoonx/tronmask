@@ -27,6 +27,98 @@ a:active {
     color: #D32F2F;
 }
 
+.icon {
+    display: inline-block;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+    width: 1em;
+    height: 1em;
+}
+
+.header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0.875rem;
+    line-height: 1;
+    position: relative;
+}
+.header-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #424242;
+}
+.header-logo img,
+.header-logo span {
+    display: block;
+}
+.header-logo img {
+    margin-right: 5px;
+}
+.dropdown-menu-toggle {
+    display: block;
+    font-size: 1.5rem;
+    color: #424242;
+}
+.dropdown-menu {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #FFFFFF;
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    padding: 0.5rem 0;
+    border-radius: 3px;
+    min-width: 100px;
+}
+.dropdown-menu a {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    color: #757575;
+}
+.dropdown-menu a:hover,
+.dropdown-menu a:focus {
+    color: #D32F2F;
+}
+
+.header-tabs {
+    display: flex;
+    width: 100%;
+}
+.header-tabs a {
+    display: block;
+    flex: 1;
+    padding: 0.75rem;
+    color: #757575;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+.header-tabs a.active {
+    color: #F44336;
+    border-bottom: 2px solid #F44336;
+}
+.header-tabs a:hover,
+.header-tabs a:focus {
+    color: #D32F2F;
+}
+
+.main {
+    padding: 7rem 1rem 1rem;
+}
+
 .auth {
     clear: both;
     padding: 1.5rem;

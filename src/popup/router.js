@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import SignIn from './pages/SignIn.vue'
 import CreateWallet from './pages/CreateWallet.vue'
 import ImportWallet from './pages/ImportWallet.vue'
-import Balance from './pages/Balance.vue'
+import Account from './pages/Account.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -12,8 +12,8 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            name: 'balance',
-            component: Balance,
+            name: 'account',
+            component: Account,
             meta: {
                 requiresAuth: true
             }
