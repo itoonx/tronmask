@@ -290,7 +290,6 @@ a:active {
 
 .box-label {
     font-size: 0.625rem;
-    text-align: center;
     text-transform: uppercase;
     color: #BDBDBD;
     padding: 0 0 1rem;
@@ -382,4 +381,20 @@ a:active {
     color: #BDBDBD;
     margin-top: 5px;
     padding: 0;
+}
+
+.box-address-label {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    color: #9E9E9E;
+    margin: 0.5rem 0 0.25rem;
+}
+.box-address {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
 }

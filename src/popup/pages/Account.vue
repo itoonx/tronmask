@@ -9,6 +9,9 @@
                 <div class="box-balance">{{ $formatNumber(account.balance, { maximumSignificantDigits: 7 }) }}</div>
                 <div class="box-balance-code">TRX</div>
 
+                <div class="box-address-label">Address</div>
+                <div class="box-address">{{ address }}</div>
+
                 <div class="box-buttons">
                     <router-link class="green" to="/"><span>Receive</span></router-link>
                     <router-link class="red" to="/"><span>Send</span></router-link>
