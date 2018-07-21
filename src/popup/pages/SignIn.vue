@@ -27,7 +27,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import { decryptKeyStore } from '../keystore'
+    import { decryptKeyStore } from '../../lib/keystore'
 
     export default {
         data: () => ({

@@ -54,7 +54,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import { encryptKeyStore } from '../keystore'
+    import { encryptKeyStore } from '../../lib/keystore'
     import { generateAccount } from '@tronscan/client/src/utils/account'
 
     export default {
