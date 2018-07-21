@@ -6,7 +6,8 @@ export default {
         bandwidth: 0,
         freeBandwidth: 0,
         frozen: 0,
-        frozenExpires: 0
+        frozenExpires: 0,
+        tokens: []
     },
 
     mutations: {
@@ -16,6 +17,10 @@ export default {
             state.freeBandwidth = account.freeBandwidth
             state.frozen = account.frozen
             state.frozenExpires = account.frozenExpires
+        },
+
+        tokens(state, tokens) {
+            state.tokens = tokens
         }
     }
 }

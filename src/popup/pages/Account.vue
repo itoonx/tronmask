@@ -95,8 +95,6 @@
                 account.frozenExpires = (accountData.frozen.balances.length > 0) ? accountData.frozen.balances[0].expires : 0
 
                 this.$store.commit('account/change', account)
-
-                console.log(accountData)
             }
         }
     }

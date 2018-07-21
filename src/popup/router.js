@@ -4,6 +4,7 @@ import SignIn from './pages/SignIn.vue'
 import CreateWallet from './pages/CreateWallet.vue'
 import ImportWallet from './pages/ImportWallet.vue'
 import Account from './pages/Account.vue'
+import Tokens from './pages/Tokens.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -14,6 +15,14 @@ const router = new Router({
             path: '/',
             name: 'account',
             component: Account,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/tokens',
+            name: 'tokens',
+            component: Tokens,
             meta: {
                 requiresAuth: true
             }
