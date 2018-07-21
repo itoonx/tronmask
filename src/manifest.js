@@ -40,7 +40,7 @@ module.exports = {
         all_frames: true
     }],
     manifest_version: 2,
-    content_security_policy: "script-src 'self'; object-src 'self'",
+    content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self'",
     web_accessible_resources: [
         'js/content.js'
     ]

@@ -8,12 +8,13 @@
 
             <div v-click-outside="hideDropdownMenu">
                 <a class="dropdown-menu-toggle" @click="toggleDropdownMenu" href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -7 24 24" width="24" height="24" preserveAspectRatio="xMinYMin" class="icon"><path d='M1 0h5a1 1 0 1 1 0 2H1a1 1 0 1 1 0-2zm7 8h5a1 1 0 0 1 0 2H8a1 1 0 1 1 0-2zM1 4h12a1 1 0 0 1 0 2H1a1 1 0 1 1 0-2z' /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
                 </a>
 
                 <nav class="dropdown-menu" v-show="showDropdownMenu">
                     <router-link to="/send">Send</router-link>
                     <router-link to="/receive">Receive</router-link>
+                    <a @click="refreshData">Refresh</a>
                     <router-link to="/settings">Settings</router-link>
                     <a @click="logout" href="#">Logout</a>
                 </nav>
@@ -48,6 +49,13 @@
             },
 
             hideDropdownMenu() {
+                this.showDropdownMenu = false
+            },
+
+            refreshData(e) {
+                e.preventDefault()
+
+                this.$emit('refresh')
                 this.showDropdownMenu = false
             },
 
