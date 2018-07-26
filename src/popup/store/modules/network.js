@@ -3,7 +3,8 @@ export default {
 
     state: {
         name: 'Tronscan Testnet',
-        url: 'https://testapi.tronscan.org'
+        url: 'https://testapi.tronscan.org',
+        type: 'testnet'
     },
 
     mutations: {

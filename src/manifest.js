@@ -20,7 +20,8 @@ module.exports = {
         '*://*/*',
         'activeTab',
         'background',
-        'storage'
+        'storage',
+        'tabs'
     ],
     browser_action: {
         default_title: 'title',

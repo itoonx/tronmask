@@ -5,6 +5,8 @@ import CreateWallet from './pages/CreateWallet.vue'
 import ImportWallet from './pages/ImportWallet.vue'
 import Account from './pages/Account.vue'
 import Tokens from './pages/Tokens.vue'
+import Transfers from './pages/Transfers.vue'
+import Transactions from './pages/Transactions.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -23,6 +25,22 @@ const router = new Router({
             path: '/tokens',
             name: 'tokens',
             component: Tokens,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/transfers',
+            name: 'transfers',
+            component: Transfers,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/transactions',
+            name: 'transactions',
+            component: Transactions,
             meta: {
                 requiresAuth: true
             }

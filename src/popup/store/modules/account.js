@@ -7,7 +7,9 @@ export default {
         freeBandwidth: 0,
         frozen: 0,
         frozenExpires: 0,
-        tokens: []
+        tokens: [],
+        transfers: [],
+        transactions:[]
     },
 
     mutations: {
@@ -21,6 +23,22 @@ export default {
 
         tokens(state, tokens) {
             state.tokens = tokens
+        },
+
+        transfers(state, transfers) {
+            state.transfers = transfers
+        },
+
+        pushTransfers(state, transfers) {
+            state.transfers.push(...transfers)
+        },
+
+        transactions(state, transactions) {
+            state.transactions = transactions
+        },
+
+        pushTransactions(state, transactions) {
+            state.transactions.push(...transactions)
         }
     }
 }
