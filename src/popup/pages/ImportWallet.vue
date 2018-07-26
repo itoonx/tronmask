@@ -27,7 +27,7 @@
 <script>
     import { mapState } from 'vuex'
     import { encryptKeyStore, validatePrivateKey } from '../../lib/keystore'
-    import { pkToAddress } from "@tronscan/client/src/utils/crypto"
+    import { pkToAddress } from '@tronscan/client/src/utils/crypto'
 
     export default {
         data: () => ({

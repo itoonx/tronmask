@@ -1,6 +1,6 @@
 import pbkdf2 from 'pbkdf2'
 import aesjs from 'aes-js'
-import { isAddressValid, pkToAddress } from "@tronscan/client/src/utils/crypto"
+import { isAddressValid, pkToAddress } from '@tronscan/client/src/utils/crypto'
 import { byteArray2hexStr, bytesToString } from '@tronscan/client/src/utils/bytes'
 import { stringToBytes, hexStr2byteArray } from '@tronscan/client/src/lib/code'
 
