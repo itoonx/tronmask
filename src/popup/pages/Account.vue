@@ -1,6 +1,6 @@
 <template>
     <div>
-        <AppHeader @refresh="loadAccount" />
+        <app-header @refresh="loadAccount" />
 
         <main class="main">
             <div class="box highlight">

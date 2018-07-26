@@ -1,6 +1,6 @@
 <template>
     <div>
-        <AppHeader @refresh="loadTokens" />
+        <app-header @refresh="loadTokens" />
 
         <main class="main">
             <div v-if="tokens.length === 0 || tokens.length === 1 & tokens[0].name === 'TRX'" class="message-empty">
