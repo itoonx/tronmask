@@ -44,6 +44,10 @@ a:active {
     height: 1em;
 }
 
+#app {
+    min-height: 600px;
+}
+
 .header {
     width: 370px;
     position: fixed;
@@ -250,8 +254,9 @@ a.network-toggle:hover {
     margin: 0.75rem 0;
     padding: 0.875rem;
     width: 100%;
-    border: 1px solid #BDBDBD;
-    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 5px;
     background: #FFFFFF;
     color: #757575;
     font-size: 0.875rem;
@@ -264,21 +269,19 @@ a.network-toggle:hover {
 }
 .button:hover,
 .button:focus {
-    background: #F5F5F5;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 .button:active {
     transform: translateY(1px);
 }
 
 .button.brand {
-    border: 1px solid #F44336;
     background: #F44336;
     color: #FAFAFA;
     font-weight: 600;
 }
 .button.brand:hover,
 .button.brand:focus {
-    border: 1px solid #D32F2F;
     background: #D32F2F;
 }
 
