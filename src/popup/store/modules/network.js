@@ -2,10 +2,10 @@ export default {
     namespaced: true,
 
     state: {
-        id: 2,
-        name: 'Tronscan Testnet',
-        url: 'https://testapi.tronscan.org',
-        type: 'testnet'
+        id: 1,
+        name: 'Mainnet',
+        url: 'https://api.tronscan.org',
+        type: 'mainnet'
     },
 
     mutations: {
