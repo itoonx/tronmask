@@ -79,11 +79,10 @@
                 this.page = 1
                 this.start = 0
 
-                const transfersData = await API.getTransfers({ address: this.address, start: this.start , limit: this.limit })
+                const transfersData = await API().getTransfers({ address: this.address, start: this.start , limit: this.limit })
                 this.lastPage = Math.ceil(transfersData.total / this.limit)
 
                 this.$store.commit('account/transfers', transfersData.transfers)
-                console.log(transfersData)
             },
 
             async loadMore(e) {
@@ -91,7 +90,7 @@
                 this.loadMoreLoading = true
 
                 this.start += this.limit
-                const transfersData = await API.getTransfers({ address: this.address, start: this.start, limit: this.limit })
+                const transfersData = await API().getTransfers({ address: this.address, start: this.start, limit: this.limit })
 
                 this.page += 1
                 this.$store.commit('account/pushTransfers', transfersData.transfers)

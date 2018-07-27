@@ -77,6 +77,7 @@
             account: state => state.account,
             address: state => state.wallet.address,
             keystore: state => state.wallet.keystore,
+            network: state => state.network,
         }),
 
         mounted() {
@@ -85,7 +86,7 @@
 
         methods: {
             async loadAccount() {
-                const accountData = await API.getAccountByAddress(this.address)
+                const accountData = await API().getAccountByAddress(this.address)
 
                 let account = {}
                 account.balance = getTokenAmount(accountData.balance)

@@ -40,7 +40,7 @@
 
         methods: {
             async loadTokens() {
-                const accountData = await API.getAccountByAddress(this.address)
+                const accountData = await API().getAccountByAddress(this.address)
                 this.$store.commit('account/tokens', accountData.tokenBalances)
             }
         }

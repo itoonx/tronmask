@@ -63,7 +63,7 @@
                 this.page = 1
                 this.start = 0
 
-                const transactionsData = await API.getTransactions({ address: this.address, start: this.start , limit: this.limit })
+                const transactionsData = await API().getTransactions({ address: this.address, start: this.start , limit: this.limit })
                 this.lastPage = Math.ceil(transactionsData.total / this.limit)
 
                 this.$store.commit('account/transactions', transactionsData.transactions)
@@ -74,7 +74,7 @@
                 this.loadMoreLoading = true
 
                 this.start += this.limit
-                const transactionsData = await API.getTransactions({ address: this.address, start: this.start, limit: this.limit })
+                const transactionsData = await API().getTransactions({ address: this.address, start: this.start, limit: this.limit })
 
                 this.page += 1
                 this.$store.commit('account/pushTransactions', transactionsData.transactions)

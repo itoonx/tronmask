@@ -63,6 +63,7 @@ a:active {
 .header-logo {
     display: flex;
     align-items: center;
+    flex: 1;
     font-size: 1rem;
     font-weight: 600;
     color: #424242;
@@ -74,6 +75,74 @@ a:active {
 .header-logo img {
     margin-right: 5px;
 }
+.network {
+    margin: -0.2rem 0.75rem 0;
+    position: relative;
+}
+.network span {
+    display: block;
+}
+a.network-toggle {
+    max-width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    padding: 0.4rem;
+    background: #E0E0E0;
+    border-radius: 3px;
+    color: #757575;
+    cursor: pointer;
+}
+a.network-toggle:hover {
+    background: #DDDDDD;
+}
+.network-icon {
+    font-size: 0.5rem;
+    padding-top: 2px;
+}
+.network-arrow {
+    padding-top: 2px;
+}
+.network-name {
+    flex: 1;
+    font-weight: 600;
+    color: #616161;
+    padding: 0.1rem 0.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.network-dropdown {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #FFFFFF;
+    position: absolute;
+    top: 30px;
+    right: 0px;
+    padding: 0.375rem 0;
+    border-radius: 3px;
+    min-width: 150px;
+}
+.network-dropdown a {
+    display: flex;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    line-height: 1.25;
+    color: #757575;
+}
+.network-dropdown a:hover,
+.network-dropdown a:focus {
+    color: #D32F2F;
+}
+.network-dropdown a span {
+    display: block;
+}
+.network-dropdown-icon {
+    padding: 3px 8px 0 0;
+    font-size: 0.625rem;
+}
+
 .dropdown-menu-toggle {
     display: block;
     font-size: 1.125rem;
