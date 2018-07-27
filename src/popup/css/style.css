@@ -122,7 +122,7 @@ a.network-toggle:hover {
     right: 0px;
     padding: 0.375rem 0;
     border-radius: 3px;
-    min-width: 150px;
+    min-width: 100px;
 }
 .network-dropdown a {
     display: flex;
