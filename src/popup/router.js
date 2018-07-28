@@ -8,6 +8,7 @@ import Tokens from './pages/Tokens.vue'
 import Transfers from './pages/Transfers.vue'
 import Transactions from './pages/Transactions.vue'
 import Receive from './pages/Receive.vue'
+import PrivateKey from './pages/PrivateKey.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -50,6 +51,14 @@ const router = new Router({
             path: '/receive',
             name: 'receive',
             component: Receive,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/private-key',
+            name: 'private-key',
+            component: PrivateKey,
             meta: {
                 requiresAuth: true
             }
