@@ -10,6 +10,7 @@ import Transactions from './pages/Transactions.vue'
 import Send from './pages/Send.vue'
 import Receive from './pages/Receive.vue'
 import PrivateKey from './pages/PrivateKey.vue'
+import Freeze from './pages/Freeze.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -68,6 +69,14 @@ const router = new Router({
             path: '/private-key',
             name: 'private-key',
             component: PrivateKey,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/freeze',
+            name: 'freeze',
+            component: Freeze,
             meta: {
                 requiresAuth: true
             }

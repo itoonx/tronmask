@@ -55,7 +55,7 @@
 
                 <div class="box-buttons">
                     <router-link v-show="account.frozen > 0" class="red" to="/"><span>Unfreeze</span></router-link>
-                    <router-link class="blue" to="/"><span>Freeze</span></router-link>
+                    <router-link class="blue" to="/freeze"><span>Freeze</span></router-link>
                 </div>
             </div>
         </main>
