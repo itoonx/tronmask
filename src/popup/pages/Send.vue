@@ -40,12 +40,10 @@
     import { isAddressValid } from '@tronscan/client/src/utils/crypto'
     import API from '../../lib/api'
     import AppHeader from '../components/AppHeader.vue'
-    import QrcodeVue from 'qrcode.vue'
 
     export default {
         components: {
-            AppHeader,
-            QrcodeVue
+            AppHeader
         },
 
         data: () => ({
@@ -70,8 +68,12 @@
 
         methods: {
             async loadTokens() {
+                this.$store.commit('loading', true)
+
                 const accountData = await API().getAccountByAddress(this.wallet.address)
+
                 this.$store.commit('account/tokens', accountData.tokenBalances)
+                this.$store.commit('loading', false)
 
                 if (this.tokens.length > 0) {
                     this.selectedToken = this.tokens[0]
