@@ -2,6 +2,9 @@
 
 TronMask is browser extension wallet for Tron. We don't save any wallet informations in our server. All the wallet informations including the private key are saved in the browser.
 
+![TronMask](https://user-images.githubusercontent.com/1266907/43358441-00cf0ae2-92bc-11e8-921b-131d3f8297af.png)
+
+
 ## Build Extension
 
 * Install [node.js](https://nodejs.org/) and npm
