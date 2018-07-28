@@ -93,3 +93,54 @@
         }
     }
 </script>
+
+<style>
+    .transaction {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.5s ease;
+        background: #FFFFFF;
+        border-radius: 5px;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        font-size: 0.875rem;
+        color: #424242;
+    }
+    .transaction:hover,
+    .transaction:focus {
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    .transaction:active {
+        transform: translateY(1px);
+    }
+    .transaction span {
+        display: block;
+    }
+    .transaction-content {
+        width: 90%;
+    }
+    .transaction-contract {
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 0.25rem;
+    }
+    .transaction-date {
+        font-size: 0.625rem;
+        color: #9E9E9E;
+    }
+    .transaction-icon {
+        width: 10%;
+        font-size: 1rem;
+        color: #757575;
+        text-align: right;
+    }
+    .transaction:hover .transaction-icon,
+    .transaction:focus .transaction-icon {
+        color: #D32F2F;
+    }
+</style>
+

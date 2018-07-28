@@ -121,3 +121,68 @@
         }
     }
 </script>
+
+<style>
+    .transfer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.5s ease;
+        background: #FFFFFF;
+        border-radius: 5px;
+        padding: 0;
+        margin-bottom: 0.75rem;
+        font-size: 0.75rem;
+        color: #424242;
+    }
+    .transfer:hover,
+    .transfer:focus {
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    .transfer:active {
+        transform: translateY(1px);
+    }
+    .transfer-content,
+    .transfer-address,
+    .transfer-date,
+    .transfer-amount {
+        display: block;
+    }
+    .transfer-icon {
+        display: flex;
+        font-size: 24px;
+        padding: 8px;
+        width: 40px;
+        color: #F44336;
+    }
+    .transfer-content {
+        flex: 1;
+        padding: 0.625rem 0;
+    }
+    .transfer-address {
+        font-weight: 600;
+        margin-bottom: 3px;
+        color: #424242;
+    }
+    .transfer-date {
+        color: #BDBDBD;
+        font-size: 0.625rem;
+    }
+    .transfer-amount {
+        flex: 1;
+        padding: 0.5rem 0.625rem;
+        font-size: 0.75rem;
+        word-break: break-all;
+        text-align: right;
+    }
+    .transfer-icon,
+    .transfer-amount {
+        color: #F44336;
+    }
+    .transfer-icon.incoming,
+    .transfer-amount.incoming {
+        color: #8BC34A;
+    }
+</style>
+

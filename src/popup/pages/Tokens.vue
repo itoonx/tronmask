@@ -46,3 +46,31 @@
         }
     }
 </script>
+
+<style>
+    .token {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        background: #FFFFFF;
+        border-radius: 5px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    .token span {
+        display: block;
+    }
+    .token-name {
+        color: #9E9E9E;
+        font-size: 0.875rem;
+    }
+    .token-balance {
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: right;
+        word-break: break-all;
+        padding-left: 1rem;
+    }
+</style>
+
