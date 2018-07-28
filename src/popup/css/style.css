@@ -195,6 +195,27 @@ a.network-toggle:hover {
     color: #D32F2F;
 }
 
+.header-subtitle {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    height: 40px;
+}
+.header-subtitle-back {
+    display: block;
+    padding: 5px 8px 0;
+    font-size: 0.87rem;
+    color: #424242;
+}
+.header-subtitle-text {
+    flex: 1;
+    font-weight: 600;
+    text-align: center;
+    padding-right: 30px;
+}
+
 .main {
     padding: 6rem 1rem 1rem;
 }
@@ -285,14 +306,31 @@ a.network-toggle:hover {
     background: #D32F2F;
 }
 
-.button_group {
+.input-group {
     display: flex;
-    justify-content: space-between;
-    margin: 0.75rem 0;
 }
-.button_group .button {
-    width: 48%;
-    margin: 0;
+.input-group .input-field {
+    flex: 1;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.input-group .button {
+    width: auto;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border: 1px solid #D9D9D9;
+    box-shadow: none;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+}
+.input-group .button:hover,
+.input-group .button:focus {
+    background: #FAFAFA;
+}
+.input-group .button:active {
+    transform: none;
+    background: #F5F5F5;
 }
 
 .form-info {

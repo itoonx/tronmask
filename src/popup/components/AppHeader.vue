@@ -35,14 +35,21 @@
                 <nav class="dropdown-menu" v-show="showDropdownMenu">
                     <router-link to="/send">Send</router-link>
                     <router-link to="/receive">Receive</router-link>
-                    <a href="#" @click.prevent="refreshData">Refresh</a>
-                    <router-link to="/settings">Settings</router-link>
+                    <router-link to="/private-key">Export Private Key</router-link>
                     <a @click.prevent="logout" href="#">Logout</a>
                 </nav>
             </div>
         </div>
 
-        <nav class="header-tabs">
+        <div v-if="subtitle" class="header-subtitle">
+            <router-link class="header-subtitle-back" to="/">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon"><path d="M3.828 9l6.071-6.071-1.414-1.414L0 10l.707.707 7.778 7.778 1.414-1.414L3.828 11H20V9H3.828z"/></svg>
+            </router-link>
+
+            <div class="header-subtitle-text">{{ subtitle }}</div>
+        </div>
+
+        <nav v-else class="header-tabs">
             <router-link :class="{ active: route.name == 'account' }" to="/">Account</router-link>
             <router-link :class="{ active: route.name == 'tokens' }" to="/tokens">Tokens</router-link>
             <router-link :class="{ active: route.name == 'transfers' }" to="/transfers">Transfers</router-link>
@@ -56,6 +63,12 @@
     import Config from '../../config'
 
     export default {
+        props: {
+            subtitle: {
+                default: false
+            }
+        },
+
         data: () => ({
             showDropdownMenu: false,
             showNetworkDropdown: false,

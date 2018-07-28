@@ -7,6 +7,7 @@ import Account from './pages/Account.vue'
 import Tokens from './pages/Tokens.vue'
 import Transfers from './pages/Transfers.vue'
 import Transactions from './pages/Transactions.vue'
+import Receive from './pages/Receive.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -41,6 +42,14 @@ const router = new Router({
             path: '/transactions',
             name: 'transactions',
             component: Transactions,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/receive',
+            name: 'receive',
+            component: Receive,
             meta: {
                 requiresAuth: true
             }
