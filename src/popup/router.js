@@ -11,6 +11,7 @@ import Send from './pages/Send.vue'
 import Receive from './pages/Receive.vue'
 import PrivateKey from './pages/PrivateKey.vue'
 import Freeze from './pages/Freeze.vue'
+import Unfreeze from './pages/Unfreeze.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -77,6 +78,14 @@ const router = new Router({
             path: '/freeze',
             name: 'freeze',
             component: Freeze,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/unfreeze',
+            name: 'unfreeze',
+            component: Unfreeze,
             meta: {
                 requiresAuth: true
             }

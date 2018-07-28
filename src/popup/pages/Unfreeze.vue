@@ -3,7 +3,7 @@
         <app-header subtitle="Freeze Balance" @refresh="loadAccount" />
 
         <main class="main">
-            <form @submit.prevent="freezeBalance" action="" method="post" class="auth-form">
+            <form @submit.prevent="unfreezeBalance" action="" method="post" class="auth-form">
                 <div class="form-info">
                     Frozen tokens are "locked" for a period of 3 days. During this period the frozen TRX cannot be traded. After this period you can unfreeze the TRX and trade the tokens.
                 </div>
@@ -13,11 +13,16 @@
                 </div>
 
                 <label class="input-label">
-                    TRX Amount
-                    <input class="input-field" type="number" name="amount" v-model="amount">
+                    Frozen Balance
+                    <input class="input-field" type="text" name="amount" v-model="frozenBalance" readonly>
                 </label>
 
-                <button class="button brand" type="submit">Freeze Balance</button>
+                <label v-show="account.frozen > 0" class="input-label">
+                    Expires
+                    <input class="input-field" type="text" name="expires" v-model="frozenExpires" readonly>
+                </label>
+
+                <button class="button brand" type="submit">Unfreeze Balance</button>
             </form>
         </main>
     </div>
@@ -44,10 +49,22 @@
             }
         }),
 
-        computed: mapState({
-            wallet: state => state.wallet,
-            balance: state => state.account.balance
-        }),
+        computed: {
+            frozenBalance() {
+                return this.$formatNumber(this.account.frozen) + ' TRX'
+            },
+            frozenExpires() {
+                return this.$formatDate(this.account.frozenExpires) + ' ' + this.$formatTime(this.account.frozenExpires)
+            },
+            ...mapState({
+                wallet: state => state.wallet,
+                account: state => state.account
+            })
+        },
+
+        mounted() {
+            this.loadAccount()
+        },
 
         methods: {
             async loadAccount() {
@@ -67,28 +84,14 @@
                 this.$store.commit('loading', false)
             },
 
-            async freezeBalance() {
+            async unfreezeBalance() {
                 this.message.show = false
-
-                if (this.amount < 1) {
-                    this.message.show = true
-                    this.message.text = 'Minimum amount to freeze is 1 TRX'
-
-                    return false
-                }
-
-                if (this.amount > this.balance) {
-                    this.message.show = true
-                    this.message.text = 'Insufficient funds'
-
-                    return false
-                }
 
                 const wallet = decryptKeyStore(this.wallet.keypass, this.wallet.keystore)
 
                 if (!wallet) {
                     this.message.show = true
-                    this.message.text = 'Something went wrong while trying to freeze TRX'
+                    this.message.text = 'Something went wrong while trying to unfreeze TRX'
 
                     return false
                 }
@@ -98,16 +101,15 @@
                 const amount = getTokenRawAmount(this.amount)
 
                 try {
-                    const { success } = await API().freezeBalance(this.wallet.address, amount, 3)(wallet.privateKey)
-
+                    const { success } = await API().unfreezeBalance(this.wallet.address)(wallet.privateKey)
 
                     this.message.show = true
 
                     if (success) {
                         this.message.type = 'success'
-                        this.message.text = 'TRX is frozen successfully'
+                        this.message.text = 'TRX is unfrozen successfully'
                     }else {
-                        this.message.text = 'Something went wrong while trying to freeze TRX'
+                        this.message.text = 'Unable to unfreeze TRX. This could be caused because the minimal freeze period hasn\'t been reached yet'
                     }
 
                     this.loadAccount()
@@ -118,7 +120,7 @@
                     this.$store.commit('loading', false)
 
                     this.message.show = true
-                    this.message.text = 'Something went wrong while trying to freeze TRX'
+                    this.message.text = 'Unable to unfreeze TRX. This could be caused because the minimal freeze period hasn\'t been reached yet'
                 }
             }
         }
