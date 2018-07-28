@@ -39,7 +39,6 @@
 <style>
     .receive-payment {
         font-size: 0.875rem;
-        padding-top: 0.5rem;
     }
 
     .receive-payment,
