@@ -27,6 +27,10 @@
                 </div>
             </div>
 
+            <a class="refresh-toggle" @click.prevent="refreshData" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon"><path d="M14.66 15.66A8 8 0 1 1 17 10h-2a6 6 0 1 0-1.76 4.24l1.42 1.42zM12 10h8l-4 4-4-4z"/></svg>
+            </a>
+
             <div v-click-outside="hideDropdownMenu">
                 <a class="dropdown-menu-toggle" @click.prevent="toggleDropdownMenu" href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
@@ -221,6 +225,11 @@
         font-size: 0.625rem;
     }
 
+    .refresh-toggle {
+        padding: 0 0.75rem 0 0;
+    }
+
+    .refresh-toggle,
     .dropdown-menu-toggle {
         display: block;
         font-size: 1.125rem;

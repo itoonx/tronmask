@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-header @refresh="loadTransactions" />
+        <app-header @refresh="refreshTransactions" />
 
         <main class="main">
             <div v-if="transactions.length === 0" class="message-empty">
@@ -67,6 +67,7 @@
                 this.lastPage = Math.ceil(transactionsData.total / this.limit)
 
                 this.$store.commit('account/transactions', transactionsData.transactions)
+                this.$store.commit('loading', false)
             },
 
             async loadMore(e) {
@@ -79,6 +80,11 @@
                 this.page += 1
                 this.$store.commit('account/pushTransactions', transactionsData.transactions)
                 this.loadMoreLoading = false
+            },
+
+            refreshTransactions(){
+                this.$store.commit('loading', true)
+                this.loadTransactions()
             },
 
             getContractName(contractType) {

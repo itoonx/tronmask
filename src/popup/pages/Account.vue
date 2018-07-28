@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-header @refresh="loadAccount" />
+        <app-header @refresh="refreshAccount" />
 
         <main class="main">
             <div class="box highlight">
@@ -97,6 +97,12 @@
 
                 this.$store.commit('account/change', account)
                 this.$store.commit('account/tokens', accountData.tokenBalances)
+                this.$store.commit('loading', false)
+            },
+
+            refreshAccount() {
+                this.$store.commit('loading', true)
+                this.loadAccount()
             }
         }
     }

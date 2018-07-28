@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-header @refresh="loadTransfers" />
+        <app-header @refresh="refreshTransfers" />
 
         <main class="main">
             <div v-if="transfers.length === 0" class="message-empty">
@@ -83,6 +83,7 @@
                 this.lastPage = Math.ceil(transfersData.total / this.limit)
 
                 this.$store.commit('account/transfers', transfersData.transfers)
+                this.$store.commit('loading', false)
             },
 
             async loadMore(e) {
@@ -95,6 +96,11 @@
                 this.page += 1
                 this.$store.commit('account/pushTransfers', transfersData.transfers)
                 this.loadMoreLoading = false
+            },
+
+            refreshTransfers(){
+                this.$store.commit('loading', true)
+                this.loadTransfers()
             },
 
             getTransferLink(hash) {

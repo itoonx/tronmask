@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-header @refresh="loadTokens" />
+        <app-header @refresh="refreshTokens" />
 
         <main class="main">
             <div v-if="tokens.length === 0 || tokens.length === 1 & tokens[0].name === 'TRX'" class="message-empty">
@@ -42,6 +42,12 @@
             async loadTokens() {
                 const accountData = await API().getAccountByAddress(this.address)
                 this.$store.commit('account/tokens', accountData.tokenBalances)
+                this.$store.commit('loading', false)
+            },
+
+            refreshTokens() {
+                this.$store.commit('loading', true)
+                this.loadTokens()
             }
         }
     }

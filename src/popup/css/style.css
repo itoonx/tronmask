@@ -52,9 +52,7 @@ a {
     cursor: pointer;
     outline: 0;
 }
-a:hover,
-a:focus,
-a:active {
+a:hover {
     color: #D32F2F;
 }
 
@@ -77,7 +75,7 @@ a:active {
     right: 0;
     bottom: 0;
     left: 0;
-    font-size: 60px;
+    font-size: 40px;
     color: #616161;
 }
 .loading .icon{
