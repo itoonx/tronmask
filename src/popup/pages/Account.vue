@@ -14,7 +14,7 @@
 
                 <div class="box-buttons">
                     <router-link class="green" to="/receive"><span>Receive</span></router-link>
-                    <router-link class="red" to="/"><span>Send</span></router-link>
+                    <router-link class="red" to="/send"><span>Send</span></router-link>
                 </div>
             </div>
 

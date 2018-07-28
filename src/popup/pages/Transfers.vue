@@ -29,10 +29,10 @@
                         </span>
 
                         <span v-if="isOutgoingTransfer(transfer)" class="transfer-amount">
-                            - {{ $formatNumber(getTokenAmount(transfer.amount), { maximumSignificantDigits: 2 }) }} {{ transfer.tokenName }}
+                            - {{ $formatNumber(getTokenAmount(transfer), { maximumSignificantDigits: 2 }) }} {{ transfer.tokenName }}
                         </span>
                         <span v-else class="transfer-amount incoming">
-                            + {{ $formatNumber(getTokenAmount(transfer.amount), { maximumSignificantDigits: 2 }) }} {{ transfer.tokenName }}
+                            + {{ $formatNumber(getTokenAmount(transfer), { maximumSignificantDigits: 2 }) }} {{ transfer.tokenName }}
                         </span>
                     </external-link>
                 </div>
@@ -107,8 +107,12 @@
                 return transfer.transferFromAddress === this.address
             },
 
-            getTokenAmount(rawAmount) {
-                return getTokenAmount(rawAmount)
+            getTokenAmount(transfer) {
+                if (transfer.tokenName === 'TRX') {
+                    return getTokenAmount(transfer.amount)
+                }
+
+                return transfer.amount
             },
 
             compressAddress(address) {

@@ -7,6 +7,7 @@ import Account from './pages/Account.vue'
 import Tokens from './pages/Tokens.vue'
 import Transfers from './pages/Transfers.vue'
 import Transactions from './pages/Transactions.vue'
+import Send from './pages/Send.vue'
 import Receive from './pages/Receive.vue'
 import PrivateKey from './pages/PrivateKey.vue'
 import store from './store'
@@ -43,6 +44,14 @@ const router = new Router({
             path: '/transactions',
             name: 'transactions',
             component: Transactions,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/send',
+            name: 'send',
+            component: Send,
             meta: {
                 requiresAuth: true
             }
