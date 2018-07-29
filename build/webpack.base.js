@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ChromeReloadPlugin = require('wcer')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { cssLoaders, htmlPage } = require('./tools')
 
@@ -12,8 +11,6 @@ let resolve = (dir) => path.join(rootDir, 'src', dir)
 module.exports = {
     entry: {
         popup: resolve('./popup'),
-        content: resolve('./content'),
-        background: resolve('./background'),
     },
     output: {
         path: path.join(rootDir, 'dist'),
@@ -80,13 +77,9 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
         // Customize your extension structure.
-        htmlPage('TronMask', 'popup', ['manifest', 'vendor', 'popup']),
+        htmlPage('TronMask', 'popup', ['vendor', 'popup']),
         // End customize
-        new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
-        new ChromeReloadPlugin({
-            port: 9090,
-            manifest: path.join(rootDir, 'src', 'manifest.js')
-        }),
+        new CopyWebpackPlugin([{ from: path.join(rootDir, 'static'), ignore: ['*.DS_Store'] }]),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: function (module) {
@@ -98,10 +91,6 @@ module.exports = {
                     ) === 0
                 )
             }
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            chunks: ['vendor']
         })
     ],
     performance: { hints: false }
