@@ -1,9 +1,9 @@
 <template>
     <div>
-        <app-header subtitle="Send Payment" @refresh="loadTokens" />
+        <app-header subtitle="Send Payment" @refresh="refreshTokens" />
 
         <main class="main">
-            <form @submit.prevent="sendPayment" action="" method="post" class="auth-form">
+            <form @submit.prevent="showConfirmDialog" action="" method="post" class="auth-form">
                 <div v-show="message.show" class="message" :class="[ message.type ]">
                     {{ message.text }}
                 </div>
@@ -30,6 +30,8 @@
                 <button class="button brand" type="submit">Send</button>
             </form>
         </main>
+
+        <confirm-dialog :text="confirmDialogText" ref="confirmDialog" @confirmed="sendPayment" />
     </div>
 </template>
 
@@ -40,10 +42,12 @@
     import { isAddressValid } from '@tronscan/client/src/utils/crypto'
     import API from '../../lib/api'
     import AppHeader from '../components/AppHeader.vue'
+    import ConfirmDialog from '../components/ConfirmDialog.vue'
 
     export default {
         components: {
-            AppHeader
+            AppHeader,
+            ConfirmDialog
         },
 
         data: () => ({
@@ -57,61 +61,53 @@
             }
         }),
 
-        computed: mapState({
-            wallet: state => state.wallet,
-            tokens: state => state.account.tokens
-        }),
+        computed: {
+            confirmDialogText() {
+                return `
+                    Are you sure you want to transfer
+                    <div><strong>${this.amount} ${this.selectedToken.name}</strong></div>
+                    <div>to</div>
+                    <div><strong>${this.receipient}</strong> ?</div>
+                `
+            },
+            ...mapState({
+                wallet: state => state.wallet,
+                tokens: state => state.account.tokens
+            })
+        },
 
         mounted() {
+            this.setSelectedToken()
             this.loadTokens()
         },
 
         methods: {
-            async loadTokens() {
-                this.$store.commit('loading', true)
-
-                const accountData = await API().getAccountByAddress(this.wallet.address)
-
-                this.$store.commit('account/tokens', accountData.tokenBalances)
-                this.$store.commit('loading', false)
-
+            setSelectedToken() {
                 if (this.tokens.length > 0) {
                     this.selectedToken = this.tokens[0]
                 }
             },
 
+            async loadTokens() {
+                const accountData = await API().getAccountByAddress(this.wallet.address)
+
+                this.$store.commit('account/tokens', accountData.tokenBalances)
+                this.$store.commit('loading', false)
+                this.setSelectedToken()
+            },
+
             async sendPayment() {
-                this.message.show = false
-
-                if (!isAddressValid(this.receipient)) {
-                    this.message.show = true
-                    this.message.text = 'Invalid Recipient Address'
-
-                    return false
-                }
-
-                if (!this.selectedToken) {
-                    this.message.show = true
-                    this.message.text = 'Please select token that you want to send'
-
-                    return false
-                }
-
-                if (this.amount > this.selectedToken.balance) {
-                    this.message.show = true
-                    this.message.text = 'Insufficient funds'
-
-                    return false
-                }
-
                 const wallet = decryptKeyStore(this.wallet.keypass, this.wallet.keystore)
 
                 if (!wallet) {
                     this.message.show = true
-                    this.message.text = 'Something went wrong while trying to broadcast the transaction'
+                    this.message.type = 'error'
+                    this.message.text = 'Something went wrong while trying to send the payment'
 
                     return false
                 }
+
+                this.$store.commit('loading', true)
 
                 let amount = this.amount
 
@@ -119,20 +115,19 @@
                     amount = getTokenRawAmount(this.amount);
                 }
 
-                this.$store.commit('loading', true)
-
                 try {
-                    const { success } = await API().send(this.selectedToken.name, this.wallet.address, this.receipient, amount)(wallet.privateKey)
+                    const result = await API().send(this.selectedToken.name, this.wallet.address, this.receipient, amount)(wallet.privateKey)
 
                     this.$store.commit('loading', false)
 
                     this.message.show = true
 
-                    if (success) {
+                    if (result.success) {
                         this.message.type = 'success'
-                        this.message.text = 'Transaction successfully broadcasted to the network'
+                        this.message.text = 'Payment has been successfully sent'
                     }else {
-                        this.message.text = 'Something went wrong while trying to broadcast the transaction'
+                        this.message.type = 'error'
+                        this.message.text = 'Something went wrong while trying to send the payment'
                     }
 
                     this.loadTokens()
@@ -142,8 +137,53 @@
                     this.$store.commit('loading', false)
 
                     this.message.show = true
-                    this.message.text = 'Something went wrong while trying to broadcast the transaction'
+                    this.message.type = 'error'
+                    this.message.text = 'Something went wrong while trying to send the payment'
                 }
+            },
+
+            showConfirmDialog(){
+                this.message.show = false
+
+                if (!isAddressValid(this.receipient)) {
+                    this.message.show = true
+                    this.message.type = 'error'
+                    this.message.text = 'Invalid recipient address'
+
+                    return false
+                }
+
+                if (!this.selectedToken) {
+                    this.message.show = true
+                    this.message.type = 'error'
+                    this.message.text = 'Please select token that you want to send'
+
+                    return false
+                }
+
+                if (this.amount > this.selectedToken.balance) {
+                    this.message.show = true
+                    this.message.type = 'error'
+                    this.message.text = 'Insufficient funds'
+
+                    return false
+                }
+
+                if (this.amount <= 0) {
+                    this.message.show = true
+                    this.message.type = 'error'
+                    this.message.text = 'Invalid token amount'
+
+                    return false
+                }
+
+                this.$refs.confirmDialog.showDialog()
+            },
+
+            refreshTokens() {
+                this.message.show = false
+                this.$store.commit('loading', true)
+                this.loadTokens()
             }
         }
     }

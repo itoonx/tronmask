@@ -1,9 +1,9 @@
 <template>
     <div>
-        <app-header subtitle="Freeze Balance" @refresh="loadAccount" />
+        <app-header subtitle="Freeze Balance" @refresh="refreshAccount" />
 
         <main class="main">
-            <form @submit.prevent="freezeBalance" action="" method="post" class="auth-form">
+            <form @submit.prevent="showConfirmDialog" action="" method="post" class="auth-form">
                 <div class="form-info">
                     Frozen tokens are "locked" for a period of 3 days. During this period the frozen TRX cannot be traded. After this period you can unfreeze the TRX and trade the tokens.
                 </div>
@@ -20,6 +20,8 @@
                 <button class="button brand" type="submit">Freeze Balance</button>
             </form>
         </main>
+
+        <confirm-dialog :text="confirmDialogText" ref="confirmDialog" @confirmed="freezeBalance" />
     </div>
 </template>
 
@@ -29,10 +31,12 @@
     import { getTokenAmount, getTokenRawAmount } from '../../lib/utils'
     import API from '../../lib/api'
     import AppHeader from '../components/AppHeader.vue'
+    import ConfirmDialog from '../components/ConfirmDialog.vue'
 
     export default {
         components: {
-            AppHeader
+            AppHeader,
+            ConfirmDialog
         },
 
         data: () => ({
@@ -44,15 +48,25 @@
             }
         }),
 
-        computed: mapState({
-            wallet: state => state.wallet,
-            balance: state => state.account.balance
-        }),
+        computed: {
+            confirmDialogText() {
+                return `
+                    Are you sure you want to freeze
+                    <div><strong>${this.amount} TRX</strong> ?</div>
+                `
+            },
+            ...mapState({
+                wallet: state => state.wallet,
+                balance: state => state.account.balance
+            })
+        },
+
+        mounted() {
+            this.loadAccount()
+        },
 
         methods: {
             async loadAccount() {
-                this.$store.commit('loading', true)
-
                 const accountData = await API().getAccountByAddress(this.wallet.address)
 
                 let account = {}
@@ -68,26 +82,11 @@
             },
 
             async freezeBalance() {
-                this.message.show = false
-
-                if (this.amount < 1) {
-                    this.message.show = true
-                    this.message.text = 'Minimum amount to freeze is 1 TRX'
-
-                    return false
-                }
-
-                if (this.amount > this.balance) {
-                    this.message.show = true
-                    this.message.text = 'Insufficient funds'
-
-                    return false
-                }
-
                 const wallet = decryptKeyStore(this.wallet.keypass, this.wallet.keystore)
 
                 if (!wallet) {
                     this.message.show = true
+                    this.message.type = 'error'
                     this.message.text = 'Something went wrong while trying to freeze TRX'
 
                     return false
@@ -105,8 +104,9 @@
 
                     if (success) {
                         this.message.type = 'success'
-                        this.message.text = 'TRX is frozen successfully'
+                        this.message.text = 'TRX has been frozen successfully'
                     }else {
+                        this.message.type = 'error'
                         this.message.text = 'Something went wrong while trying to freeze TRX'
                     }
 
@@ -118,8 +118,37 @@
                     this.$store.commit('loading', false)
 
                     this.message.show = true
+                    this.message.type = 'error'
                     this.message.text = 'Something went wrong while trying to freeze TRX'
                 }
+            },
+
+            showConfirmDialog(){
+                this.message.show = false
+
+                if (this.amount < 1) {
+                    this.message.show = true
+                    this.message.type = 'error'
+                    this.message.text = 'Minimum amount to freeze is 1 TRX'
+
+                    return false
+                }
+
+                if (this.amount > this.balance) {
+                    this.message.show = true
+                    this.message.type = 'error'
+                    this.message.text = 'Insufficient funds'
+
+                    return false
+                }
+
+                this.$refs.confirmDialog.showDialog()
+            },
+
+            refreshAccount() {
+                this.message.show = false
+                this.$store.commit('loading', true)
+                this.loadAccount()
             }
         }
     }

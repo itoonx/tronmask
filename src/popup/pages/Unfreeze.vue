@@ -1,9 +1,9 @@
 <template>
     <div>
-        <app-header subtitle="Freeze Balance" @refresh="loadAccount" />
+        <app-header subtitle="Unfreeze Balance" @refresh="refreshAccount" />
 
         <main class="main">
-            <form @submit.prevent="unfreezeBalance" action="" method="post" class="auth-form">
+            <form @submit.prevent="showConfirmDialog" action="" method="post" class="auth-form">
                 <div class="form-info">
                     Frozen tokens are "locked" for a period of 3 days. During this period the frozen TRX cannot be traded. After this period you can unfreeze the TRX and trade the tokens.
                 </div>
@@ -12,36 +12,41 @@
                     {{ message.text }}
                 </div>
 
-                <label class="input-label">
-                    Frozen Balance
-                    <input class="input-field" type="text" name="amount" v-model="frozenBalance" readonly>
-                </label>
+                <div v-show="account.frozen > 0">
+                    <label class="input-label">
+                        Frozen Balance
+                        <input class="input-field" type="text" name="amount" v-model="frozenBalance" readonly>
+                    </label>
 
-                <label v-show="account.frozen > 0" class="input-label">
-                    Expires
-                    <input class="input-field" type="text" name="expires" v-model="frozenExpires" readonly>
-                </label>
+                    <label class="input-label">
+                        Expires
+                        <input class="input-field" type="text" name="expires" v-model="frozenExpires" readonly>
+                    </label>
 
-                <button class="button brand" type="submit">Unfreeze Balance</button>
+                    <button class="button brand" type="submit">Unfreeze Balance</button>
+                </div>
             </form>
         </main>
+
+        <confirm-dialog text="Are you sure you want to unfreeze TRX ?" ref="confirmDialog" @confirmed="unfreezeBalance" />
     </div>
 </template>
 
 <script>
     import { mapState } from 'vuex'
     import { decryptKeyStore } from '../../lib/keystore'
-    import { getTokenAmount, getTokenRawAmount } from '../../lib/utils'
+    import { getTokenAmount } from '../../lib/utils'
     import API from '../../lib/api'
     import AppHeader from '../components/AppHeader.vue'
+    import ConfirmDialog from '../components/ConfirmDialog.vue'
 
     export default {
         components: {
-            AppHeader
+            AppHeader,
+            ConfirmDialog
         },
 
         data: () => ({
-            amount: 0,
             message: {
                 show: false,
                 type: 'error',
@@ -68,8 +73,6 @@
 
         methods: {
             async loadAccount() {
-                this.$store.commit('loading', true)
-
                 const accountData = await API().getAccountByAddress(this.wallet.address)
 
                 let account = {}
@@ -85,12 +88,11 @@
             },
 
             async unfreezeBalance() {
-                this.message.show = false
-
                 const wallet = decryptKeyStore(this.wallet.keypass, this.wallet.keystore)
 
                 if (!wallet) {
                     this.message.show = true
+                    this.message.type = 'error'
                     this.message.text = 'Something went wrong while trying to unfreeze TRX'
 
                     return false
@@ -98,30 +100,39 @@
 
                 this.$store.commit('loading', true)
 
-                const amount = getTokenRawAmount(this.amount)
-
                 try {
                     const { success } = await API().unfreezeBalance(this.wallet.address)(wallet.privateKey)
 
-                    this.message.show = true
-
                     if (success) {
                         this.message.type = 'success'
-                        this.message.text = 'TRX is unfrozen successfully'
+                        this.message.text = 'TRX has been unfrozen successfully'
+                        this.$store.commit('account/frozen', 0)
                     }else {
+                        this.message.type = 'error'
                         this.message.text = 'Unable to unfreeze TRX. This could be caused because the minimal freeze period hasn\'t been reached yet'
                     }
 
-                    this.loadAccount()
-                    this.amount = 0
-
+                    this.message.show = true
                     this.$store.commit('loading', false)
+                    this.loadAccount()
                 } catch (e) {
                     this.$store.commit('loading', false)
 
                     this.message.show = true
+                    this.message.type = 'error'
                     this.message.text = 'Unable to unfreeze TRX. This could be caused because the minimal freeze period hasn\'t been reached yet'
                 }
+            },
+
+            showConfirmDialog() {
+                this.message.show = false
+                this.$refs.confirmDialog.showDialog()
+            },
+
+            refreshAccount() {
+                this.message.show = false
+                this.$store.commit('loading', true)
+                this.loadAccount()
             }
         }
     }
