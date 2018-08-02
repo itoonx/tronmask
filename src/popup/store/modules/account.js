@@ -21,6 +21,10 @@ export default {
             state.frozenExpires = account.frozenExpires
         },
 
+        frozen(state, frozen) {
+            state.frozen = frozen
+        },
+
         tokens(state, tokens) {
             state.tokens = tokens
         },
