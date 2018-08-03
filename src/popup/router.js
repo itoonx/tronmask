@@ -12,6 +12,7 @@ import Receive from './pages/Receive.vue'
 import PrivateKey from './pages/PrivateKey.vue'
 import Freeze from './pages/Freeze.vue'
 import Unfreeze from './pages/Unfreeze.vue'
+import Votes from './pages/Votes.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -86,6 +87,14 @@ const router = new Router({
             path: '/unfreeze',
             name: 'unfreeze',
             component: Unfreeze,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/votes',
+            name: 'votes',
+            component: Votes,
             meta: {
                 requiresAuth: true
             }

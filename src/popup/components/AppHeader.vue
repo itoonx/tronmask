@@ -39,6 +39,7 @@
                 <nav class="dropdown-menu" v-show="showDropdownMenu">
                     <router-link to="/send">Send</router-link>
                     <router-link to="/receive">Receive</router-link>
+                    <router-link to="/votes">Votes</router-link>
                     <router-link to="/private-key">Export Private Key</router-link>
                     <a @click.prevent="logout" href="#">Logout</a>
                 </nav>
