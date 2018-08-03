@@ -41,6 +41,7 @@
     }
     .vue-dialog-button.primary {
         color: #F44336;
+        font-weight: 600;
     }
     .vue-dialog-button.secondary {
         color: #757575;
