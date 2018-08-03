@@ -10,8 +10,8 @@
             {{ error.message }}
         </div>
 
-        <form @submit="submitForm" action="" method="post" class="auth-form">
-            <input class="input-field" type="text" name="private-key" placeholder="Private Key" v-model="privateKey">
+        <form @submit="submitForm" action="" method="post" class="auth-form" autocomplete="off">
+            <input class="input-field" type="text" placeholder="Private Key" v-model="privateKey">
             <input class="input-field" type="password" name="password" placeholder="New Password (min 8 chars)" v-model="password">
 
             <div class="form-info">

@@ -33,7 +33,7 @@
                 {{ error.message }}
             </div>
 
-            <form @submit="submitForm" action="" method="post" class="auth-form">
+            <form @submit="submitForm" action="" method="post" class="auth-form" autocomplete="off">
                 <input class="input-field" type="password" name="password" placeholder="New Password (min 8 chars)" v-model="password">
 
                 <div class="form-info">

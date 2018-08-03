@@ -10,7 +10,7 @@
             {{ error.message }}
         </div>
 
-        <form @submit="submitForm" action="" method="post" class="auth-form">
+        <form @submit="submitForm" action="" method="post" class="auth-form" autocomplete="off">
             <input class="input-field" type="password" name="password" placeholder="Password" v-model="password">
 
             <button class="button brand" type="submit">Sign In</button>

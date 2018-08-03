@@ -26,7 +26,7 @@
             </div>
 
             <div v-else>
-                <form @submit.prevent="submitForm" action="" method="post" class="auth-form">
+                <form @submit.prevent="submitForm" action="" method="post" class="auth-form" autocomplete="off">
                     <div class="form-info">
                         Please enter your password to export the private key.
                     </div>

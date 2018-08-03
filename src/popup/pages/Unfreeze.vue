@@ -3,7 +3,7 @@
         <app-header subtitle="Unfreeze Balance" @refresh="refreshAccount" />
 
         <main class="main">
-            <form @submit.prevent="showConfirmDialog" action="" method="post" class="auth-form">
+            <form @submit.prevent="showConfirmDialog" action="" method="post" class="auth-form" autocomplete="off">
                 <div class="form-info">
                     Frozen tokens are "locked" for a period of 3 days. During this period the frozen TRX cannot be traded. After this period you can unfreeze the TRX and trade the tokens.
                 </div>

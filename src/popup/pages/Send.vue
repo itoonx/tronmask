@@ -3,7 +3,7 @@
         <app-header subtitle="Send Payment" @refresh="refreshTokens" />
 
         <main class="main">
-            <form @submit.prevent="showConfirmDialog" action="" method="post" class="auth-form">
+            <form @submit.prevent="showConfirmDialog" action="" method="post" class="auth-form" autocomplete="off">
                 <div v-show="message.show" class="message" :class="[ message.type ]">
                     {{ message.text }}
                 </div>
