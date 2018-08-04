@@ -3,8 +3,12 @@
         <app-header subtitle="Votes" @refresh="refreshCandidates" />
 
         <main class="main">
-            <div class="candidates" v-for="(candidate, index) in candidates" :key="candidate.address">
-                <div class="candidate-rank">{{ index + 1 }}</div>
+            <div class="search-box">
+                <input class="input-field" type="search" placeholder="Search" v-model="search">
+            </div>
+
+            <div class="candidates" v-for="candidate in filteredCandidates" :key="candidate.address">
+                <div class="candidate-rank">{{ candidate.rank }}</div>
                 <div class="candidate-info">
                     <div class="candidate-name">{{ candidate.name || candidate.url }}</div>
                     <div class="candidate-total-votes">{{ $formatNumber(candidate.votes) }}</div>
@@ -26,11 +30,20 @@
             AppHeader
         },
 
-        computed: mapState({
-            wallet: state => state.wallet,
-            votes: state => state.votes.votes,
-            candidates: state => state.votes.candidates
+        data: () => ({
+            search: ''
         }),
+
+        computed: {
+            filteredCandidates() {
+                return this.candidates.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || c.url.toLowerCase().includes(this.search.toLowerCase()))
+            },
+            ...mapState({
+                wallet: state => state.wallet,
+                votes: state => state.votes.votes,
+                candidates: state => state.votes.candidates
+            })
+        },
 
         mounted() {
             this.loadCandidates()
@@ -40,7 +53,10 @@
             async loadCandidates() {
                 const votes = await API().getAccountVotes(this.wallet.address)
                 const candidatesData = await API().getVotesForCurrentCycle()
-                const candidates = sortBy(candidatesData.candidates, c => c.votes * -1)
+                const candidates = sortBy(candidatesData.candidates, c => c.votes * -1).map((c, i) => ({
+                    ...c,
+                    rank: i + 1
+                }))
 
                 this.$store.commit('votes/votes', votes.votes)
                 this.$store.commit('votes/candidates', candidates)
