@@ -4,6 +4,7 @@ import VuexPersistence from 'vuex-persist'
 import wallet from './modules/wallet'
 import network from './modules/network'
 import account from './modules/account'
+import votes from './modules/votes'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     modules: {
         wallet,
         network,
-        account
+        account,
+        votes
     },
 
     state: {
