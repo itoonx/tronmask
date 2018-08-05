@@ -8,7 +8,7 @@
             </div>
 
             <div v-else>
-                <div class="token" v-for="token in tokens" :key="token.name" v-if="token.name !== 'TRX'">
+                <div class="token" v-for="token in tokens" :key="token.id" v-if="token.name !== 'TRX'">
                     <span class="token-name">{{ token.name }}</span>
                     <span class="token-balance">{{ $formatNumber(token.balance, { maximumSignificantDigits: 7 }) }}</span>
                 </div>
@@ -41,7 +41,12 @@
         methods: {
             async loadTokens() {
                 const accountData = await API().getAccountByAddress(this.address)
-                this.$store.commit('account/tokens', accountData.tokenBalances)
+                const tokens = accountData.tokenBalances.map((t, i) => ({
+                    ...t,
+                    id: i + 1
+                }))
+
+                this.$store.commit('account/tokens', tokens)
                 this.$store.commit('loading', false)
             },
 

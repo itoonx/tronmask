@@ -16,7 +16,7 @@
                 <label class="input-label">
                     Token
                     <select class="input-field" v-model="selectedToken">
-                        <option v-for="token in tokens" :key="token.name" :value="token">
+                        <option v-for="token in tokens" :key="token.id" :value="token">
                             {{ token.name }} ({{ $formatNumber(token.balance, { maximumSignificantDigits: 7 }) }} available)
                         </option>
                     </select>
@@ -90,8 +90,12 @@
 
             async loadTokens() {
                 const accountData = await API().getAccountByAddress(this.wallet.address)
+                const tokens = accountData.tokenBalances.map((t, i) => ({
+                    ...t,
+                    id: i + 1
+                }))
 
-                this.$store.commit('account/tokens', accountData.tokenBalances)
+                this.$store.commit('account/tokens', tokens)
                 this.$store.commit('loading', false)
                 this.setSelectedToken()
             },
