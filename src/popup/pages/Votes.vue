@@ -21,7 +21,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import { sortBy } from 'lodash'
+    import { sortBy, sumBy } from 'lodash'
     import API from '../../lib/api'
     import AppHeader from '../components/AppHeader.vue'
 
@@ -38,8 +38,15 @@
             filteredCandidates() {
                 return this.candidates.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || c.url.toLowerCase().includes(this.search.toLowerCase()))
             },
+            votesSpent(){
+                return sumBy(Object.values(this.votes), vote => parseInt(vote, 10) || 0)
+            },
+            votesAvailable(){
+                return this.frozen - this.votesSpent
+            },
             ...mapState({
                 wallet: state => state.wallet,
+                frozen: state => state.account.frozen,
                 votes: state => state.votes.votes,
                 candidates: state => state.votes.candidates
             })
