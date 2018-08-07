@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-header subtitle="Freeze Balance" @refresh="refreshAccount" />
+        <app-header subtitle="Freeze Balance" @refresh="refresh" />
 
         <main class="main">
             <form @submit.prevent="showConfirmDialog" action="" method="post" class="auth-form" autocomplete="off">
@@ -28,12 +28,15 @@
 <script>
     import { mapState } from 'vuex'
     import { decryptKeyStore } from '../../lib/keystore'
-    import { getTokenAmount, getTokenRawAmount } from '../../lib/utils'
+    import { getTokenRawAmount } from '../../lib/utils'
     import API from '../../lib/api'
+    import account from '../mixins/account'
     import AppHeader from '../components/AppHeader.vue'
     import ConfirmDialog from '../components/ConfirmDialog.vue'
 
     export default {
+        mixins: [account],
+
         components: {
             AppHeader,
             ConfirmDialog
@@ -56,31 +59,17 @@
                 `
             },
             ...mapState({
-                wallet: state => state.wallet,
-                balance: state => state.account.balance
+                wallet: state => state.wallet
             })
         },
 
         mounted() {
-            this.loadAccount()
+            if (this.account.balance === 0) {
+                this.loadAccount()
+            }
         },
 
         methods: {
-            async loadAccount() {
-                const accountData = await API().getAccountByAddress(this.wallet.address)
-
-                let account = {}
-                account.balance = getTokenAmount(accountData.balance)
-                account.bandwidth = accountData.bandwidth.netRemaining
-                account.freeBandwidth = accountData.bandwidth.freeNetRemaining
-                account.frozen = getTokenAmount(accountData.frozen.total)
-                account.frozenExpires = (accountData.frozen.balances.length > 0) ? accountData.frozen.balances[0].expires : 0
-
-                this.$store.commit('account/change', account)
-                this.$store.commit('account/tokens', accountData.tokenBalances)
-                this.$store.commit('loading', false)
-            },
-
             async freezeBalance() {
                 const wallet = decryptKeyStore(this.wallet.keypass, this.wallet.keystore)
 
@@ -98,7 +87,6 @@
 
                 try {
                     const { success } = await API().freezeBalance(this.wallet.address, amount, 3)(wallet.privateKey)
-
 
                     this.message.show = true
 
@@ -134,7 +122,7 @@
                     return false
                 }
 
-                if (this.amount > this.balance) {
+                if (this.amount > this.account.balance) {
                     this.message.show = true
                     this.message.type = 'error'
                     this.message.text = 'Insufficient funds'
@@ -145,10 +133,9 @@
                 this.$refs.confirmDialog.showDialog()
             },
 
-            refreshAccount() {
+            refresh() {
                 this.message.show = false
-                this.$store.commit('loading', true)
-                this.loadAccount()
+                this.refreshAccount()
             }
         }
     }

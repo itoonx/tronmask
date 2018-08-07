@@ -1,14 +1,14 @@
 <template>
     <div>
-        <app-header @refresh="refreshTokens" />
+        <app-header @refresh="refreshAccount" />
 
         <main class="main">
-            <div v-if="tokens.length === 0 || tokens.length === 1 & tokens[0].name === 'TRX'" class="message-empty">
+            <div v-if="account.tokens.length === 0 || account.tokens.length === 1 & account.tokens[0].name === 'TRX'" class="message-empty">
                 No tokens found
             </div>
 
             <div v-else>
-                <div class="token" v-for="token in tokens" :key="token.id" v-if="token.name !== 'TRX'">
+                <div class="token" v-for="token in account.tokens" :key="token.id" v-if="token.name !== 'TRX'">
                     <span class="token-name">{{ token.name }}</span>
                     <span class="token-balance">{{ $formatNumber(token.balance, { maximumSignificantDigits: 7 }) }}</span>
                 </div>
@@ -18,41 +18,19 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
-    import { getTokenAmount } from '../../lib/utils'
-    import API from '../../lib/api'
+    import account from '../mixins/account'
     import AppHeader from '../components/AppHeader.vue'
 
     export default {
+        mixins: [account],
+
         components: {
             AppHeader
         },
 
-        computed: mapState({
-            tokens: state => state.account.tokens,
-            address: state => state.wallet.address,
-            keystore: state => state.wallet.keystore,
-        }),
-
         mounted() {
-            this.loadTokens()
-        },
-
-        methods: {
-            async loadTokens() {
-                const accountData = await API().getAccountByAddress(this.address)
-                const tokens = accountData.tokenBalances.map((t, i) => ({
-                    ...t,
-                    id: i + 1
-                }))
-
-                this.$store.commit('account/tokens', tokens)
-                this.$store.commit('loading', false)
-            },
-
-            refreshTokens() {
-                this.$store.commit('loading', true)
-                this.loadTokens()
+            if (this.account.tokens.length === 0) {
+                this.loadAccount()
             }
         }
     }
