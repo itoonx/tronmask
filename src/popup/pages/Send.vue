@@ -16,7 +16,7 @@
                 <label class="input-label">
                     Token
                     <select class="input-field" v-model="selectedToken">
-                        <option v-for="token in tokens" :key="token.id" :value="token">
+                        <option v-for="token in account.tokens" :key="token.id" :value="token">
                             {{ token.name }} ({{ $formatNumber(token.balance, { maximumSignificantDigits: 7 }) }} available)
                         </option>
                     </select>
@@ -41,10 +41,13 @@
     import { getTokenRawAmount } from '../../lib/utils'
     import { isAddressValid } from '@tronscan/client/src/utils/crypto'
     import API from '../../lib/api'
+    import account from '../mixins/account'
     import AppHeader from '../components/AppHeader.vue'
     import ConfirmDialog from '../components/ConfirmDialog.vue'
 
     export default {
+        mixins: [account],
+
         components: {
             AppHeader,
             ConfirmDialog
@@ -71,33 +74,29 @@
                 `
             },
             ...mapState({
-                wallet: state => state.wallet,
-                tokens: state => state.account.tokens
+                wallet: state => state.wallet
             })
         },
 
         mounted() {
             this.setSelectedToken()
-            this.loadTokens()
+
+            if (this.account.tokens.length === 0) {
+                this.loadTokens()
+            }
         },
 
         methods: {
             setSelectedToken() {
-                if (this.tokens.length > 0) {
-                    this.selectedToken = this.tokens[0]
+                if (this.account.tokens.length > 0) {
+                    this.selectedToken = this.account.tokens[0]
                 }
             },
 
             async loadTokens() {
-                const accountData = await API().getAccountByAddress(this.wallet.address)
-                const tokens = accountData.tokenBalances.map((t, i) => ({
-                    ...t,
-                    id: i + 1
-                }))
-
-                this.$store.commit('account/tokens', tokens)
-                this.$store.commit('loading', false)
+                await this.loadAccount()
                 this.setSelectedToken()
+                this.$store.commit('loading', false)
             },
 
             async sendPayment() {

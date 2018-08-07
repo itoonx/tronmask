@@ -63,47 +63,18 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
-    import { getTokenAmount } from '../../lib/utils'
-    import API from '../../lib/api'
+    import account from '../mixins/account'
     import AppHeader from '../components/AppHeader.vue'
 
     export default {
+        mixins: [account],
+
         components: {
             AppHeader
         },
 
-        computed: mapState({
-            account: state => state.account,
-            address: state => state.wallet.address,
-            keystore: state => state.wallet.keystore,
-            network: state => state.network,
-        }),
-
         mounted() {
             this.loadAccount()
-        },
-
-        methods: {
-            async loadAccount() {
-                const accountData = await API().getAccountByAddress(this.address)
-
-                let account = {}
-                account.balance = getTokenAmount(accountData.balance)
-                account.bandwidth = accountData.bandwidth.netRemaining
-                account.freeBandwidth = accountData.bandwidth.freeNetRemaining
-                account.frozen = getTokenAmount(accountData.frozen.total)
-                account.frozenExpires = (accountData.frozen.balances.length > 0) ? accountData.frozen.balances[0].expires : 0
-
-                this.$store.commit('account/change', account)
-                this.$store.commit('account/tokens', accountData.tokenBalances)
-                this.$store.commit('loading', false)
-            },
-
-            refreshAccount() {
-                this.$store.commit('loading', true)
-                this.loadAccount()
-            }
         }
     }
 </script>
