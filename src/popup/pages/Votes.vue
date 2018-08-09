@@ -2,7 +2,11 @@
     <div>
         <app-header subtitle="Votes" @refresh="refreshVotes" />
 
-        <main class="main">
+        <main class="main votes">
+            <div v-show="message.show" class="message" :class="[ message.type ]">
+                {{ message.text }}
+            </div>
+
             <div class="votes-stats">
                 <div class="votes-stats-item">
                     {{ $formatNumber(totalVotes) }}
@@ -38,7 +42,7 @@
 
                     <label class="input-label">
                         Votes
-                        <input class="input-field" type="number" min="0" v-model="selectedCandidateVotes">
+                        <input class="input-field" type="number" min="0" :max="votes[selectedCandidate.address] + votesAvailable" v-model="selectedCandidateVotes">
                     </label>
                 </div>
                 <div class="candidate-modal-buttons">
@@ -53,6 +57,7 @@
 <script>
     import { mapState } from 'vuex'
     import { sortBy, sumBy } from 'lodash'
+    import { decryptKeyStore } from '../../lib/keystore'
     import API from '../../lib/api'
     import account from '../mixins/account'
     import AppHeader from '../components/AppHeader.vue'
@@ -67,7 +72,12 @@
         data: () => ({
             search: '',
             selectedCandidate: {},
-            selectedCandidateVotes: 0
+            selectedCandidateVotes: 0,
+            message: {
+                show: false,
+                type: 'error',
+                text: ''
+            }
         }),
 
         computed: {
@@ -113,11 +123,10 @@
                 this.$store.commit('votes/candidates', candidates)
                 this.$store.commit('votes/totalVotes', candidatesData.total_votes)
                 this.$store.commit('loading', false)
-
-                console.log(candidatesData)
             },
 
             refreshVotes() {
+                this.message.show = false
                 this.$store.commit('loading', true)
                 this.loadAccount()
                 this.loadCandidates()
@@ -129,16 +138,57 @@
                 this.$modal.show('candidate-modal')
             },
 
-            submitVotes() {
-                console.log(this.selectedCandidate)
-                console.log(this.selectedCandidateVotes)
+            async submitVotes() {
                 this.$modal.hide('candidate-modal')
+                this.$store.commit('loading', true)
+
+                const wallet = decryptKeyStore(this.wallet.keypass, this.wallet.keystore)
+
+                if (!wallet) {
+                    this.message.show = true
+                    this.message.type = 'error'
+                    this.message.text = 'Something went wrong while trying to vote'
+
+                    return false
+                }
+
+                try {
+                    let candidateVotes = this.votes
+                    candidateVotes[this.selectedCandidate.address] = parseInt(this.selectedCandidateVotes, 10)
+
+                    const result = await API().voteForWitnesses(this.wallet.address, candidateVotes)(wallet.privateKey)
+                    this.$store.commit('loading', false)
+
+                    this.message.show = true
+
+                    if (result.success) {
+                        this.message.type = 'success'
+                        this.message.text = 'Thanks for submitting your vote'
+                        this.$store.commit('votes/votes', candidateVotes)
+                    }else {
+                        this.message.type = 'error'
+                        this.message.text = 'Something went wrong while trying to vote'
+                    }
+                } catch (e) {
+                    this.$store.commit('loading', false)
+
+                    this.message.show = true
+                    this.message.type = 'error'
+                    this.message.text = 'Something went wrong while trying to vote'
+                }
+
+                this.loadAccount()
+                this.loadCandidates()
             }
         }
     }
 </script>
 
 <style>
+    .main.votes .message {
+        margin-bottom: 1rem;
+    }
+
     .candidates {
         display: flex;
         align-items: center;
