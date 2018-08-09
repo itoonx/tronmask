@@ -1,8 +1,20 @@
 <template>
     <div>
-        <app-header subtitle="Votes" @refresh="refreshCandidates" />
+        <app-header subtitle="Votes" @refresh="refreshVotes" />
 
         <main class="main">
+            <div class="votes-stats">
+                <div class="votes-stats-item">
+                    {{ $formatNumber(totalVotes) }}
+                    <span>Total Votes</span>
+                </div>
+
+                <div class="votes-stats-item">
+                    {{ $formatNumber(votesAvailable) }}
+                    <span>Votes Available</span>
+                </div>
+            </div>
+
             <div class="search-box">
                 <input class="input-field" type="search" placeholder="Search" v-model="search">
             </div>
@@ -23,9 +35,12 @@
     import { mapState } from 'vuex'
     import { sortBy, sumBy } from 'lodash'
     import API from '../../lib/api'
+    import account from '../mixins/account'
     import AppHeader from '../components/AppHeader.vue'
 
     export default {
+        mixins: [account],
+
         components: {
             AppHeader
         },
@@ -42,17 +57,25 @@
                 return sumBy(Object.values(this.votes), vote => parseInt(vote, 10) || 0)
             },
             votesAvailable(){
-                return this.frozen - this.votesSpent
+                if (this.account.frozen > 0) {
+                    return this.account.frozen - this.votesSpent
+                }
+
+                return this.account.frozen
             },
             ...mapState({
                 wallet: state => state.wallet,
-                frozen: state => state.account.frozen,
                 votes: state => state.votes.votes,
-                candidates: state => state.votes.candidates
+                candidates: state => state.votes.candidates,
+                totalVotes: state => state.votes.totalVotes
             })
         },
 
         mounted() {
+            if (this.account.frozen === 0) {
+                this.loadAccount()
+            }
+
             this.loadCandidates()
         },
 
@@ -67,11 +90,13 @@
 
                 this.$store.commit('votes/votes', votes.votes)
                 this.$store.commit('votes/candidates', candidates)
+                this.$store.commit('votes/totalVotes', candidatesData.total_votes)
                 this.$store.commit('loading', false)
             },
 
-            refreshCandidates() {
+            refreshVotes() {
                 this.$store.commit('loading', true)
+                this.loadAccount()
                 this.loadCandidates()
             }
         }
@@ -121,6 +146,25 @@
         padding: 0.75rem 1rem 0.75rem 0.75rem;
         text-align: right;
         word-break: break-all;
+    }
+    .votes-stats {
+        display: flex;
+    }
+    .votes-stats-item {
+        width: 50%;
+        padding: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-align: center;
+        word-break: break-all;
+    }
+    .votes-stats-item span {
+        display: block;
+        margin-top: 0.25rem;
+        color: #9E9E9E;
+        font-size: 0.625rem;
+        font-weight: 400;
+        text-transform: uppercase;
     }
 </style>
 

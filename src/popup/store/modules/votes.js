@@ -3,7 +3,8 @@ export default {
 
     state: {
         votes: {},
-        candidates: []
+        candidates: [],
+        totalVotes: 0
     },
 
     mutations: {
@@ -14,5 +15,9 @@ export default {
         candidates(state, candidates) {
             state.candidates = candidates
         },
+
+        totalVotes(state, totalVotes) {
+            state.totalVotes = totalVotes
+        }
     }
 }
