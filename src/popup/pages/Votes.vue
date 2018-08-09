@@ -19,7 +19,7 @@
                 <input class="input-field" type="search" placeholder="Search" v-model="search">
             </div>
 
-            <div class="candidates" v-for="candidate in filteredCandidates" :key="candidate.address">
+            <div class="candidates" v-for="candidate in filteredCandidates" :key="candidate.address" @click="showCandidateDialog(candidate)">
                 <div class="candidate-rank">{{ candidate.rank }}</div>
                 <div class="candidate-info">
                     <div class="candidate-name">{{ candidate.name || candidate.url }}</div>
@@ -28,6 +28,25 @@
                 <div class="candidate-votes">{{ $formatNumber(votes[candidate.address] || 0) }}</div>
             </div>
         </main>
+
+        <modal name="candidate-modal" width="350" height="auto">
+            <div class="candidate-modal">
+                <div class="candidate-modal-content">
+                    <div class="candidate-modal-name">{{ selectedCandidate.name || selectedCandidate.url }}</div>
+                    <div class="candidate-modal-address">{{ selectedCandidate.address }}</div>
+                    <div class="candidate-modal-total-votes">{{ $formatNumber(selectedCandidate.votes) }} <span>Total Votes</span></div>
+
+                    <label class="input-label">
+                        Votes
+                        <input class="input-field" type="number" min="0" v-model="selectedCandidateVotes">
+                    </label>
+                </div>
+                <div class="candidate-modal-buttons">
+                    <button class="cancel" @click="$modal.hide('candidate-modal')" type="button">Cancel</button>
+                    <button class="submit" @click="submitVotes" type="button">Submit</button>
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -46,7 +65,9 @@
         },
 
         data: () => ({
-            search: ''
+            search: '',
+            selectedCandidate: {},
+            selectedCandidateVotes: 0
         }),
 
         computed: {
@@ -92,12 +113,26 @@
                 this.$store.commit('votes/candidates', candidates)
                 this.$store.commit('votes/totalVotes', candidatesData.total_votes)
                 this.$store.commit('loading', false)
+
+                console.log(candidatesData)
             },
 
             refreshVotes() {
                 this.$store.commit('loading', true)
                 this.loadAccount()
                 this.loadCandidates()
+            },
+
+            showCandidateDialog(candidate) {
+                this.selectedCandidate = candidate
+                this.selectedCandidateVotes = this.votes[candidate.address] || 0
+                this.$modal.show('candidate-modal')
+            },
+
+            submitVotes() {
+                console.log(this.selectedCandidate)
+                console.log(this.selectedCandidateVotes)
+                this.$modal.hide('candidate-modal')
             }
         }
     }
@@ -147,6 +182,7 @@
         text-align: right;
         word-break: break-all;
     }
+
     .votes-stats {
         display: flex;
     }
@@ -165,6 +201,62 @@
         font-size: 0.625rem;
         font-weight: 400;
         text-transform: uppercase;
+    }
+
+    .candidate-modal {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .candidate-modal-content {
+        padding: 0.75rem;
+    }
+    .candidate-modal-name,
+    .candidate-modal-address,
+    .candidate-modal-total-votes {
+        text-align: center;
+    }
+    .candidate-modal-name {
+        font-weight: 600;
+    }
+    .candidate-modal-address {
+        color: #9E9E9E;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+    .candidate-modal-total-votes {
+        font-size: 0.875rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    .candidate-modal-total-votes span {
+        font-size: 0.75rem;
+        color: #9E9E9E;
+    }
+    .candidate-modal-buttons {
+        display: flex;
+    }
+    .candidate-modal-buttons button {
+        display: block;
+        margin: 0;
+        padding: 0;
+        width: 50%;
+        height: 40px;
+        font-size: 0.75rem;
+        line-height: 40px;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: none;
+        border-top: 1px solid #EEEEEE;
+        color: #757575;
+        outline: 0;
+    }
+    .candidate-modal-buttons button.cancel {
+        border-right: 1px solid #EEEEEE;
+    }
+    .candidate-modal-buttons button.submit {
+        color: #F44336;
+        font-weight: 600;
     }
 </style>
 
