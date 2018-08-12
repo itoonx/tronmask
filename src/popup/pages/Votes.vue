@@ -41,8 +41,14 @@
             <div class="candidate-modal">
                 <div class="candidate-modal-content">
                     <div class="candidate-modal-name">{{ selectedCandidate.name || selectedCandidate.url }}</div>
-                    <div class="candidate-modal-address">{{ selectedCandidate.address }}</div>
+
+                    <div class="candidate-modal-address">
+                        <external-link :url="getAddressLink(selectedCandidate.address)">{{ selectedCandidate.address }}</external-link>
+                    </div>
+
                     <div class="candidate-modal-total-votes">{{ $formatNumber(selectedCandidate.votes) }} <span>Total Votes</span></div>
+
+                    <external-link v-show="selectedCandidate.hasPage" class="button candidate-modal-team" :url="getTeamLink(selectedCandidate.address)">Visit Team Page</external-link>
 
                     <label class="input-label">
                         Votes
@@ -62,15 +68,18 @@
     import { mapState } from 'vuex'
     import { sortBy, sumBy } from 'lodash'
     import { decryptKeyStore } from '../../lib/keystore'
+    import { getTronScanLink } from '../../lib/utils'
     import API from '../../lib/api'
     import account from '../mixins/account'
     import AppHeader from '../components/AppHeader.vue'
+    import ExternalLink from '../components/ExternalLink.vue'
 
     export default {
         mixins: [account],
 
         components: {
-            AppHeader
+            AppHeader,
+            ExternalLink
         },
 
         data: () => ({
@@ -195,6 +204,18 @@
                     this.message.type = 'error'
                     this.message.text = 'Something went wrong while submitting the votes'
                 }
+            },
+
+            getAddressLink(address) {
+                const path = 'address/' + address
+
+                return getTronScanLink(path)
+            },
+
+            getTeamLink(address) {
+                const path = 'representative/' + address
+
+                return getTronScanLink(path)
             }
         }
     }
@@ -294,6 +315,13 @@
         font-size: 0.75rem;
         margin-top: 0.25rem;
     }
+    .candidate-modal-address a {
+        color: #9E9E9E;
+    }
+    .candidate-modal-address a:hover,
+    .candidate-modal-address a:focus {
+        color: #F44336;
+    }
     .candidate-modal-total-votes {
         font-size: 0.875rem;
         margin-top: 1rem;
@@ -321,12 +349,29 @@
         color: #757575;
         outline: 0;
     }
+    .candidate-modal-buttons button:hover {
+        background: #FAFAFA;
+    }
     .candidate-modal-buttons button.cancel {
         border-right: 1px solid #EEEEEE;
     }
     .candidate-modal-buttons button.submit {
         color: #F44336;
         font-weight: 600;
+    }
+
+    a.button.candidate-modal-team {
+        box-shadow: none;
+        border: 1px solid #9E9E9E;
+        color: #616161;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        padding: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    a.button.candidate-modal-team:hover,
+    a.button.candidate-modal-team:focus {
+        background: #FAFAFA;
     }
 
     .votes-confirm {
