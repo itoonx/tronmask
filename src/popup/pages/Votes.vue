@@ -31,6 +31,10 @@
                 </div>
                 <div class="candidate-votes">{{ $formatNumber(votes[candidate.address] || 0) }}</div>
             </div>
+
+            <div class="votes-confirm">
+                <button type="button" class="button brand" :disabled="votesConfirmDisabled" @click="confirmVotes">Confirm Votes</button>
+            </div>
         </main>
 
         <modal name="candidate-modal" width="350" height="auto">
@@ -42,7 +46,7 @@
 
                     <label class="input-label">
                         Votes
-                        <input class="input-field" type="number" min="0" :max="votes[selectedCandidate.address] + votesAvailable" v-model="selectedCandidateVotes">
+                        <input class="input-field" type="number" min="0" :max="selectedCandidateMaxVotes" v-model="selectedCandidateVotes">
                     </label>
                 </div>
                 <div class="candidate-modal-buttons">
@@ -73,11 +77,13 @@
             search: '',
             selectedCandidate: {},
             selectedCandidateVotes: 0,
+            selectedCandidateMaxVotes: 0,
             message: {
                 show: false,
                 type: 'error',
                 text: ''
-            }
+            },
+            votesConfirmDisabled: true
         }),
 
         computed: {
@@ -133,58 +139,72 @@
             },
 
             showCandidateDialog(candidate) {
+                const candidateVotes = this.votes[candidate.address] || 0
+
                 this.selectedCandidate = candidate
-                this.selectedCandidateVotes = this.votes[candidate.address] || 0
+                this.selectedCandidateVotes = candidateVotes
+                this.selectedCandidateMaxVotes = candidateVotes + this.votesAvailable
                 this.$modal.show('candidate-modal')
             },
 
-            async submitVotes() {
+            submitVotes() {
                 this.$modal.hide('candidate-modal')
-                this.$store.commit('loading', true)
 
+                this.$store.commit('votes/addVotes', {
+                    address: this.selectedCandidate.address,
+                    votes: parseInt(this.selectedCandidateVotes, 10)
+                })
+
+                this.votesConfirmDisabled = false
+            },
+
+            async confirmVotes() {
                 const wallet = decryptKeyStore(this.wallet.keypass, this.wallet.keystore)
 
                 if (!wallet) {
                     this.message.show = true
                     this.message.type = 'error'
-                    this.message.text = 'Something went wrong while trying to vote'
+                    this.message.text = 'Something went wrong while submitting the votes'
 
                     return false
                 }
 
-                try {
-                    let candidateVotes = this.votes
-                    candidateVotes[this.selectedCandidate.address] = parseInt(this.selectedCandidateVotes, 10)
+                this.$store.commit('loading', true)
 
-                    const result = await API().voteForWitnesses(this.wallet.address, candidateVotes)(wallet.privateKey)
+                try {
+                    const result = await API().voteForWitnesses(this.wallet.address, this.votes)(wallet.privateKey)
                     this.$store.commit('loading', false)
 
                     this.message.show = true
 
                     if (result.success) {
                         this.message.type = 'success'
-                        this.message.text = 'Thanks for submitting your vote'
-                        this.$store.commit('votes/votes', candidateVotes)
+                        this.message.text = 'Thanks for submitting your votes'
+
+                        this.loadAccount()
+                        this.loadCandidates()
+                        this.votesConfirmDisabled = true
                     }else {
                         this.message.type = 'error'
-                        this.message.text = 'Something went wrong while trying to vote'
+                        this.message.text = 'Something went wrong while submitting the votes'
                     }
                 } catch (e) {
                     this.$store.commit('loading', false)
 
                     this.message.show = true
                     this.message.type = 'error'
-                    this.message.text = 'Something went wrong while trying to vote'
+                    this.message.text = 'Something went wrong while submitting the votes'
                 }
-
-                this.loadAccount()
-                this.loadCandidates()
             }
         }
     }
 </script>
 
 <style>
+    .main.votes {
+        padding-bottom: 70px;
+    }
+
     .main.votes .message {
         margin-bottom: 1rem;
     }
@@ -307,6 +327,20 @@
     .candidate-modal-buttons button.submit {
         color: #F44336;
         font-weight: 600;
+    }
+
+    .votes-confirm {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 370px;
+        height: 58px;
+        padding: 0.5rem;
+        background: #FFFFFF;
+        box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .votes-confirm .button {
+        margin: 0;
     }
 </style>
 
