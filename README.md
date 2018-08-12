@@ -18,6 +18,7 @@ Download and install TronMask from [Google Chrome Web Store](https://chrome.goog
 * Send & receive TRX and other tokens.
 * Freeze & unfreeze TRX.
 * Switch the network to Mainnet or Testnet.
+* Votes for Super Representatives.
 
 ## Manual Installation
 * Download `tronmask.zip` from the [latest release](https://github.com/hisman/tronmask/releases/latest).

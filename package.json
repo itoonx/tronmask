@@ -1,8 +1,8 @@
 {
   "name": "tronmask",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Tron Browser Extension Wallet",
-  "author": "Hisman <hisman.ns@gmail.com>",
+  "author": "Hisman",
   "license": "MIT",
   "private": false,
   "homepage": "https://github.com/hisman/tronmask",
