@@ -1,1 +1,1 @@
-exclude: [package.json, gulpfile.js]
+exclude: [package.json, gulpfile.js, less]

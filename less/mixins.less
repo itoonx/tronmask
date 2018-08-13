@@ -1,0 +1,6 @@
+/* Responsive Breakpoint */
+.breakpoint(@size, @rules) {
+    @media screen and (min-width: ~'@{size}') {
+        @rules();
+    }
+}
